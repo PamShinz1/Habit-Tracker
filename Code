@@ -1,0 +1,80 @@
+import datetime
+
+habits = []
+
+class Habit:
+
+    def __init__(self, name):
+        self.name = name
+        self.last_completed = "Never"
+    
+    def mark_complete(self):
+        self.last_completed = datetime.datetime.now().strftime("%y-%m-%d")
+
+    def __str__(self):
+        return f"{self.name} was last completed on {self.last_completed}"
+    
+def show_menu():
+    print("1. Add Habit")
+    print("2. View Habits")
+    print("3. Mark Habit Complete")
+    print("4. Delete Habit")
+    print("5. Exit")
+
+def main():
+
+    while True:
+        show_menu()
+        user_input = input("Please enter 1-5 to choose an option from the menu:\n")
+        if user_input == "1":
+            add_habit()
+        elif user_input == "2":
+            view_habits()
+        elif user_input == "3":
+            mark_habit_complete()
+        elif user_input == "4":
+            delete_habit()
+        elif user_input == "5":
+            print("Goodbye!")
+            break
+        else:
+            print("You entered an invalid input. Please try again")
+
+    
+def add_habit():
+    new_habit = input("Enter a new habit\n")
+    habit = Habit(new_habit)
+    habits.append(habit)
+    print(f"Your habit {habit.name} has successfully been added!")
+
+def view_habits():
+    if not habits:
+        print("You have not logged any habits yet")
+    
+    else:
+        print("\nYour habits:")
+        for i, habit in enumerate(habits, 1):
+            print(f"{i}. {habit}")
+        print()
+
+def mark_habit_complete():
+    view_habits()
+    if habits:
+        try:
+            index = int(input("Enter the number of the habit you would like to mark as complete:\n")) - 1
+            habits[index].mark_complete()
+            print(f"'{habits[index].name}' has been marked as complete on {habits[index].last_completed}")
+        except (ValueError, IndexError):
+            print("You have entered an invalid selection. Please try again.")
+            
+def delete_habit():
+    view_habits()
+    if habits:
+        try:
+            index = int(input("Please enter the number of the habit you would like to remove:\n")) - 1
+            removed = habits.pop(index)
+            print(f"{removed.name} has been successfully removed")
+        except (ValueError, IndexError):
+            print("You have entered an invalid selection. Please try again.")
+
+main()
